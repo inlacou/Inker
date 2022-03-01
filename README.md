@@ -38,3 +38,6 @@ onError { throwable ->
   Inker.e { throwable }
 }
 ```
+
+## Results
+![results](https://github.com/inlacou/Inker/blob/master/pics/results_resumed.png)
