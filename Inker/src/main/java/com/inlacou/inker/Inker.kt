@@ -1,11 +1,15 @@
 package com.inlacou.inker
 
 import android.util.Log
-import java.util.regex.Pattern
 
 object Inker {
 
-	var log: Boolean = false
+	var logD: Boolean = true
+	var logW: Boolean = true
+	var logI: Boolean = true
+	var logV: Boolean = true
+	var logE: Boolean = true
+	var logWTF: Boolean = true
 
 	private fun getStackTag(): String {
 		val stack = Throwable().stackTrace
@@ -13,53 +17,34 @@ object Inker {
 		return stack[index+1].let { "${createStackElementTag(it)}.${it.methodName}" }
 	}
 
-	private fun createStackElementTag(element: StackTraceElement): String {
-		var tag = element.className.substringAfterLast('.')
-		/*
-		val m = Pattern.compile("(\\$\\d+)+$").matcher(tag)
-		if (m.find()) tag = m.replaceAll("")
-		*/
-		// Tag length limit was removed in API 24.
-		return tag
-	}
+	private fun createStackElementTag(element: StackTraceElement): String = element.className.substringAfterLast('.')
 
-	fun d(cb: () -> String?)   { if(log) d(cb()) }
-	fun w(cb: () -> Any?)   { if(log) cb().let {
+	fun d(cb: () -> String?)   { if(logD) d(cb()) }
+	fun w(cb: () -> Any?)   { if(logW) cb().let {
 		when (it) {
 			is String -> w(it)
 			is Throwable -> w(it)
 			else -> w(it.toString())
 		}
 	} }
-	fun i(cb: () -> String?)   { if(log) i(cb()) }
-	fun v(cb: () -> String?)   { if(log) v(cb()) }
-	fun e(cb: () -> Any?)      { if(log) cb().let {
+	fun i(cb: () -> String?)   { if(logI) i(cb()) }
+	fun v(cb: () -> String?)   { if(logV) v(cb()) }
+	fun e(cb: () -> Any?)      { if(logE) cb().let {
 		when (it) {
 			is String -> e(it)
 			is Throwable -> e(it)
 			else -> e(it.toString())
 		}
 	} }
-	fun wtf(cb: () -> String?) { if(log) wtf(cb()) }
+	fun wtf(cb: () -> String?) { if(logWTF) wtf(cb()) }
 
-	/*
-	fun d(s: String?)    { Timber.tag(getStackTag()); Timber.d(s) }
-	fun w(s: String?)    { Timber.tag(getStackTag()); Timber.w(s) }
-	fun w(t: Throwable?) { Timber.tag(getStackTag()); Timber.w(t) }
-	fun i(s: String?)    { Timber.tag(getStackTag()); Timber.i(s) }
-	fun v(s: String?)    { Timber.tag(getStackTag()); Timber.v(s) }
-	fun e(s: String?)    { Timber.tag(getStackTag()); Timber.e(s) }
-	fun e(t: Throwable?) { Timber.tag(getStackTag()); Timber.e(t) }
-	fun wtf(s: String?)  { Timber.tag(getStackTag()); Timber.wtf(s) }
-	*/
-
-	fun d(s: String?)    { if(log) Log.d(getStackTag(), s.toString()) }
-	fun w(s: String?)    { if(log) Log.w(getStackTag(), s.toString()) }
-	fun w(t: Throwable?) { if(log) Log.w(getStackTag(), t) }
-	fun i(s: String?)    { if(log) Log.i(getStackTag(), s.toString()) }
-	fun v(s: String?)    { if(log) Log.v(getStackTag(), s.toString()) }
-	fun e(s: String?)    { if(log) Log.e(getStackTag(), s.toString()) }
-	fun e(t: Throwable?) { if(log) Log.e(getStackTag(), null, t) }
-	fun wtf(s: String?)  { if(log) Log.wtf(getStackTag(), s) }
+	private fun d(s: String?)    { Log.d(getStackTag(), s.toString()) }
+	private fun w(s: String?)    { Log.w(getStackTag(), s.toString()) }
+	private fun w(t: Throwable?) { Log.w(getStackTag(), t) }
+	private fun i(s: String?)    { Log.i(getStackTag(), s.toString()) }
+	private fun v(s: String?)    { Log.v(getStackTag(), s.toString()) }
+	private fun e(s: String?)    { Log.e(getStackTag(), s.toString()) }
+	private fun e(t: Throwable?) { Log.e(getStackTag(), null, t) }
+	private fun wtf(s: String?)  { Log.wtf(getStackTag(), s) }
 
 }

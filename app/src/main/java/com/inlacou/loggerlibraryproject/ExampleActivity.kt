@@ -31,10 +31,8 @@ class ExampleActivity : AppCompatActivity() {
 	private val logOffDurations = mutableListOf<Long>()
 	private val timberOnDurations = mutableListOf<Long>()
 	private val timberOffDurations = mutableListOf<Long>()
-	private val inkerAOnDurations = mutableListOf<Long>()
-	private val inkerAOffDurations = mutableListOf<Long>()
-	private val inkerBOnDurations = mutableListOf<Long>()
-	private val inkerBOffDurations = mutableListOf<Long>()
+	private val inkerOnDurations = mutableListOf<Long>()
+	private val inkerOffDurations = mutableListOf<Long>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -53,17 +51,17 @@ class ExampleActivity : AppCompatActivity() {
 		do{
 			text = "$text RUN #$run\n"
 
-			Inker.log = true
+			Inker.logD = true
 			timeStamp = System.currentTimeMillis()
-			persons.forEach { if(Inker.log) Log.d("MainActivity", it.toString()) }
+			persons.forEach { if(Inker.logD) Log.d("MainActivity", it.toString()) }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
 			logOnDurations.add(duration)
 			text = "$text\t Log.d() (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 
-			Inker.log = false
+			Inker.logD = false
 			timeStamp = System.currentTimeMillis()
-			persons.forEach { if(Inker.log) Log.d("MainActivity", it.toString()) }
+			persons.forEach { if(Inker.logD) Log.d("MainActivity", it.toString()) }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
 			logOffDurations.add(duration)
@@ -89,37 +87,20 @@ class ExampleActivity : AppCompatActivity() {
 			text = "$text\t Timber.d() (disabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 			Timber.uproot(releaseTree)
 
-			Inker.log = true
-			timeStamp = System.currentTimeMillis()
-			persons.forEach { Inker.d(it.toString()) }
-			timeStamp2 = System.currentTimeMillis()
-			duration = timeStamp2-timeStamp
-			inkerAOnDurations.add(duration)
-			text = "$text\t Inker.d() (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
-
-
-			Inker.log = false
-			timeStamp = System.currentTimeMillis()
-			persons.forEach { Inker.d(it.toString()) }
-			timeStamp2 = System.currentTimeMillis()
-			duration = timeStamp2-timeStamp
-			inkerAOffDurations.add(duration)
-			text = "$text\t Inker.d() (disabled):\t\t${duration.msToTime()} (${duration}ms)\n"
-
-			Inker.log = true
+			Inker.logD = true
 			timeStamp = System.currentTimeMillis()
 			persons.forEach { Inker.d { it.toString() } }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
-			inkerBOnDurations.add(duration)
+			inkerOnDurations.add(duration)
 			text = "$text\t Inker.d{} (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 
-			Inker.log = false
+			Inker.logD = false
 			timeStamp = System.currentTimeMillis()
 			persons.forEach { Inker.d { it.toString() } }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
-			inkerBOffDurations.add(duration)
+			inkerOffDurations.add(duration)
 			text = "$text\t Inker.d{} (disabled):\t\t${duration.msToTime()} (${duration}ms)\n\n"
 			run++
 		}while (run<timesToRun)
@@ -135,13 +116,9 @@ class ExampleActivity : AppCompatActivity() {
 		text = "$text     - Average Timber.d() (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 		duration = timberOffDurations.reduce { acc, l -> acc+l }/timesToRun
 		text = "$text     - Average Timber.d() (disabled):\t\t${duration.msToTime()} (${duration}ms)\n"
-		duration = inkerAOnDurations.reduce { acc, l -> acc+l }/timesToRun
-		text = "$text     - Average Inker.d() (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
-		duration = inkerAOffDurations.reduce { acc, l -> acc+l }/timesToRun
-		text = "$text     - Average Inker.d() (disabled):\t\t${duration.msToTime()} (${duration}ms)\n"
-		duration = inkerBOnDurations.reduce { acc, l -> acc+l }/timesToRun
+		duration = inkerOnDurations.reduce { acc, l -> acc+l }/timesToRun
 		text = "$text     - Average Inker.d{} (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
-		duration = inkerBOffDurations.reduce { acc, l -> acc+l }/timesToRun
+		duration = inkerOffDurations.reduce { acc, l -> acc+l }/timesToRun
 		text = "$text     - Average Inker.d{} (disabled):\t\t${duration.msToTime()} (${duration}ms)\n\n"
 
 		text = "$text Code examples: \n"
@@ -149,10 +126,8 @@ class ExampleActivity : AppCompatActivity() {
 		text = "$text     - Log.d() (disabled): if(false) Log.d()\n"
 		text = "$text     - Timber.d() (enabled): Timber.d() with Timber.DebugTree\n"
 		text = "$text     - Timber.d() (disabled): Timber.d() with a Tree that overrides Timber.d to do nothing\n"
-		text = "$text     - Inker.d() (enabled): Inker.d() with Inker.log to true\n"
-		text = "$text     - Inker.d() (disabled): Inker.d() with Inker.log to false\n"
-		text = "$text     - Inker.d{} (enabled): Inker.d{} with Inker.log to true\n"
-		text = "$text     - Inker.d{} (disabled): Inker.d{} with Inker.log to false\n\n"
+		text = "$text     - Inker.d{} (enabled): Inker.d{} with Inker.logD to true\n"
+		text = "$text     - Inker.d{} (disabled): Inker.d{} with Inker.logD to false\n\n"
 
 		text = "$text Total time: ${(System.currentTimeMillis()-absoluteStartTimestamp).msToTime()}\n"
 

@@ -12,7 +12,7 @@ class WorkActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_work)
-		Inker.log = true
+		Inker.logD = true
 		Timber.plant(Timber.DebugTree())
 		Inker.d { "test-inker" }
 		Timber.d("test-timber")
