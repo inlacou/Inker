@@ -40,4 +40,11 @@ onError { throwable ->
 ```
 
 ## Results
+
+Created a list of 30 000 somewhat complex items. The test is iterating over the list and logging the `item.toString()` on different logging libraries.
+
 ![results](https://github.com/inlacou/Inker/blob/master/pics/results_resumed.png)
+
+## Thanks
+
+I have to mention and thanks [@JakeWharton](https://github.com/JakeWharton) for his awesome work and inspiration and in this case, for the [Timber](https://github.com/JakeWharton/timber) library I have used for so long.
