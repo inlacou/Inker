@@ -45,23 +45,24 @@ class ExampleActivity : AppCompatActivity() {
 
 		findViewById<TextView>(R.id.textview).text = "working... $timesToRun times with $sampleSize sample size each"
 
+		var aux = false
 		var text = ""
 		val absoluteStartTimestamp = System.currentTimeMillis()
 		text = "$text Log.d vs Timber vs Logger\n\n"
 		do{
 			text = "$text RUN #$run\n"
 
-			Inker.logD = true
+			aux = true
 			timeStamp = System.currentTimeMillis()
-			persons.forEach { if(Inker.logD) Log.d("MainActivity", it.toString()) }
+			persons.forEach { if(aux) Log.d("MainActivity", it.toString()) }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
 			logOnDurations.add(duration)
 			text = "$text\t Log.d() (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 
-			Inker.logD = false
+			aux = false
 			timeStamp = System.currentTimeMillis()
-			persons.forEach { if(Inker.logD) Log.d("MainActivity", it.toString()) }
+			persons.forEach { if(aux) Log.d("MainActivity", it.toString()) }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
 			logOffDurations.add(duration)
@@ -87,21 +88,26 @@ class ExampleActivity : AppCompatActivity() {
 			text = "$text\t Timber.d() (disabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 			Timber.uproot(releaseTree)
 
-			Inker.logD = true
+			val debugColor = Inker.DebugColor()
+			Inker.mix(debugColor)
 			timeStamp = System.currentTimeMillis()
 			persons.forEach { Inker.d { it.toString() } }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
 			inkerOnDurations.add(duration)
 			text = "$text\t Inker.d{} (enabled):\t\t${duration.msToTime()} (${duration}ms)\n"
+			Inker.unMix(debugColor)
 
-			Inker.logD = false
+			val releaseColor = InkerReleaseColor()
+			Inker.mix(releaseColor)
 			timeStamp = System.currentTimeMillis()
 			persons.forEach { Inker.d { it.toString() } }
 			timeStamp2 = System.currentTimeMillis()
 			duration = timeStamp2-timeStamp
 			inkerOffDurations.add(duration)
 			text = "$text\t Inker.d{} (disabled):\t\t${duration.msToTime()} (${duration}ms)\n\n"
+			Inker.unMix(releaseColor)
+
 			run++
 		}while (run<timesToRun)
 
@@ -126,8 +132,8 @@ class ExampleActivity : AppCompatActivity() {
 		text = "$text     - Log.d() (disabled): if(false) Log.d()\n"
 		text = "$text     - Timber.d() (enabled): Timber.d() with Timber.DebugTree\n"
 		text = "$text     - Timber.d() (disabled): Timber.d() with a Tree that overrides Timber.d to do nothing\n"
-		text = "$text     - Inker.d{} (enabled): Inker.d{} with Inker.logD to true\n"
-		text = "$text     - Inker.d{} (disabled): Inker.d{} with Inker.logD to false\n\n"
+		text = "$text     - Inker.d{} (enabled): Inker.d{} with Inker.DebugColor\n"
+		text = "$text     - Inker.d{} (disabled): Inker.d{} with a Color that overrides Inker.d to a null function\n\n"
 
 		text = "$text Total time: ${(System.currentTimeMillis()-absoluteStartTimestamp).msToTime()}\n"
 
