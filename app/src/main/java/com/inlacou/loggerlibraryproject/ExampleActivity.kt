@@ -88,7 +88,7 @@ class ExampleActivity : AppCompatActivity() {
 			text = "$text\t Timber.d() (disabled):\t\t${duration.msToTime()} (${duration}ms)\n"
 			Timber.uproot(releaseTree)
 
-			val debugColor = Inker.DebugColor()
+			val debugColor = DebugColor()
 			Inker.mix(debugColor)
 			timeStamp = System.currentTimeMillis()
 			persons.forEach { Inker.d { it.toString() } }

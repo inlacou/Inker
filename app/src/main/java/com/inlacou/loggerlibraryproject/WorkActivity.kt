@@ -8,11 +8,10 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class WorkActivity : AppCompatActivity() {
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_work)
-		Inker.mix(Inker.DebugColor())
+		Inker.mix(DebugColor())
 		Timber.plant(Timber.DebugTree())
 		Inker.d { "test-inker" }
 		Timber.d("test-timber")
