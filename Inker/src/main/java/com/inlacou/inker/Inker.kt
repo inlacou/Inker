@@ -4,7 +4,7 @@ import java.lang.Exception
 
 object Inker {
 
-	val palette = mutableListOf<Color>()
+	val palette = mutableSetOf<Color>()
 
 	fun mix(color: Color) { palette.add(color) }
 	fun unMix(color: Color) { palette.remove(color) }
